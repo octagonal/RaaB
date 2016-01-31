@@ -4,10 +4,12 @@ require 'redd'
 require 'json'
 require 'rdiscount'
 require 'htmlentities'
+require 'yaml'
 
 NAV_PAGES_FLAIR = ["aboutme", "resume"]
 
-w = Redd.it(:userless, "yqjP_uLm53Pa-g", "k5ZHJce1Eg9y04yGyLC719fXcBE0", user_agent: "Web:yqjP_uLm53Pa-g:v0.0.1 (by /u/pegasus_527)")
+api_data = YAML::load_stream(File.open("./api_data.yaml")).first["api"];
+w = Redd.it(:userless, api_data["client_id"], api_data["secret"], user_agent: api_data["user_agent"])
 sub = w.subreddit_from_name("RaaB")
 
 get '/' do
