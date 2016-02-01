@@ -23,12 +23,12 @@ class Posts < Api
     [post]
   end
 
-  def Posts.getByFlairSingle(flair)
+  def Posts.getByFlair(flair)
     @@sub.get_hot().each { |post|
       path = post.permalink.split("/").select {|n| n != ""}
       path = path[path.length - 2 .. path.length - 1].join("/")
       post[:permalink] = path
       post[:selftext] = RDiscount.new( HTMLEntities.new.decode(post.selftext) ).to_html
-    }.select {|n| n.link_flair_text == flair}[0,1]
+    }.select {|n| n.link_flair_text == flair}
   end
 end

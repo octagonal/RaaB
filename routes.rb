@@ -1,14 +1,8 @@
 require 'tilt/erubis'
 require 'sinatra'
-require 'redd'
-require 'json'
-require 'rdiscount'
-require 'htmlentities'
-require 'yaml'
 
 require './repository/Posts.rb'
 require './repository/Info.rb'
-require 'nokogiri'
 
 get '/' do
 
@@ -29,7 +23,7 @@ end
 
 get '/:flair' do
   erb :index, :locals => {
-    :posts => Posts.getByFlairSingle("#{params['flair']}"),
+    :posts => Posts.getByFlair("#{params['flair']}"),
     :sidebar => Info.getSidebar()
   }
 end

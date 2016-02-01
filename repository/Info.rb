@@ -3,6 +3,7 @@ require 'rdiscount'
 require 'htmlentities'
 require 'yaml'
 require './repository/Api.rb'
+require 'nokogiri'
 
 class Info < Api
   def Info.getSidebar()
