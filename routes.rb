@@ -6,37 +6,30 @@ require 'rdiscount'
 require 'htmlentities'
 require 'yaml'
 
-NAV_PAGES_FLAIR = ["aboutme", "resume"]
-
-api_data = YAML::load_stream(File.open("./api_data.yaml")).first["api"];
-w = Redd.it(:userless, api_data["client_id"], api_data["secret"], user_agent: api_data["user_agent"])
-sub = w.subreddit_from_name("RaaB")
+require './repository/Posts.rb'
+require './repository/Info.rb'
+require 'nokogiri'
 
 get '/' do
+
   erb :index, :locals => {
-    :posts =>
-      sub.get_hot().each { |post|
-        path = post.permalink.split("/").select {|n| n != ""}
-        path = path[path.length - 2 .. path.length - 1].join("/")
-        post[:permalink] = path
-        post[:selftext] = markdown( HTMLEntities.new.decode(post.selftext) )
-      }.select {|n| !NAV_PAGES_FLAIR.find {|word| n.link_flair_text == word}},
-    :sidebar =>
-      markdown( HTMLEntities.new.decode(sub.description))
+    :posts => Posts.getAll(),
+    :sidebar => Info.getSidebar()
   }
 end
 
 
-get '/aboutme' do
+get '/:id/:title' do
   erb :index, :locals => {
-    :posts =>
-      sub.get_hot().each { |post|
-        path = post.permalink.split("/").select {|n| n != ""}
-        path = path[path.length - 2 .. path.length - 1].join("/")
-        post[:permalink] = path
-        post[:selftext] = markdown( HTMLEntities.new.decode(post.selftext) )
-      }.select {|n| n.link_flair_text == "aboutme"},
-    :sidebar =>
-      markdown( HTMLEntities.new.decode(sub.description))
+    :posts => Posts.getSingle("#{params['id']}"),
+    :sidebar => Info.getSidebar()
+  }
+end
+
+
+get '/:flair' do
+  erb :index, :locals => {
+    :posts => Posts.getByFlairSingle("#{params['flair']}"),
+    :sidebar => Info.getSidebar()
   }
 end
