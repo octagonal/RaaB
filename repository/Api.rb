@@ -9,7 +9,7 @@ class Api
   end
 
   def self.api_data
-    @@w
+    @@api_data
   end
 
   def self.w
