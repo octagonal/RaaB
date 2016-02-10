@@ -20,25 +20,39 @@ DataMapper.auto_upgrade!
 
 get '/' do
   if logged_in?
-    puts current_user.email
+    posts = Posts.getAll()
+  else
+    posts = Posts.getAll().delete_if { |x| x.hidden == true }
   end
 
   erb :index, :locals => {
-    :posts => Posts.getAll(),
+    :posts => posts,
     :sidebar => Info.getSidebar()
   }
 end
 
 get '/flair/:tag' do
+  if logged_in?
+    posts = Posts.getByFlair("#{params['tag']}")
+  else
+    posts = Posts.getByFlair("#{params['tag']}").delete_if { |x| x.hidden == true }
+  end
+
   erb :index, :locals => {
-    :posts => Posts.getByFlair("#{params['tag']}"),
+    :posts => posts,
     :sidebar => Info.getSidebar()
   }
 end
 
 get '/:id/:title' do
+  if logged_in?
+    posts = Posts.getSingle("#{params['id']}")
+  else
+    posts = Posts.getSingle("#{params['id']}").delete_if { |x| x.hidden == true }
+  end
+
   erb :index, :locals => {
-    :posts => Posts.getSingle("#{params['id']}"),
+    :posts => posts,
     :sidebar => Info.getSidebar()
   }
 end

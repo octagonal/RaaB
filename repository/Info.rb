@@ -25,7 +25,6 @@ class Info < Api
       :description => html.xpath("//p")[1].text,
       :links => links
     }
-    puts sidebar
     sidebar
   end
 end
