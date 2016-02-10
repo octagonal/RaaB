@@ -26,7 +26,7 @@
        <a href="<%= post.permalink%>"><%= post.title %></a>
        <span class="small"><%= post.author %> (<%= post.author_flair_text %>)</span>
      </h1>
-     <a href="<%= post.link_flair_text %>"><span class="label label-success"><%= post.link_flair_text %></span></a>
+     <a href="/flair/<%= post.link_flair_text %>"><span class="label label-success"><%= post.link_flair_text %></span></a>
      <%= post.selftext %>
     <% end -%>
   </div>
