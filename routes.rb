@@ -19,40 +19,32 @@ DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
 DataMapper.auto_upgrade!
 
 get '/' do
-  if logged_in?
-    posts = Posts.getAll()
-  else
-    posts = Posts.getAll().delete_if { |x| x.hidden == true }
-  end
-
   erb :index, :locals => {
-    :posts => posts,
+    :posts => ensureAuthorized(Posts.getAll()),
     :sidebar => Info.getSidebar()
   }
 end
 
 get '/flair/:tag' do
-  if logged_in?
-    posts = Posts.getByFlair("#{params['tag']}")
-  else
-    posts = Posts.getByFlair("#{params['tag']}").delete_if { |x| x.hidden == true }
-  end
-
   erb :index, :locals => {
-    :posts => posts,
+    :posts => ensureAuthorized(Posts.getByFlair("#{params['tag']}")),
     :sidebar => Info.getSidebar()
   }
 end
 
 get '/:id/:title' do
-  if logged_in?
-    posts = Posts.getSingle("#{params['id']}")
-  else
-    posts = Posts.getSingle("#{params['id']}").delete_if { |x| x.hidden == true }
-  end
-
   erb :index, :locals => {
-    :posts => posts,
+    :posts => ensureAuthorized(Posts.getSingle("#{params['id']}")),
     :sidebar => Info.getSidebar()
   }
+end
+
+def ensureAuthorized(posts)
+  if logged_in? && Api.api_data["allowed"].include?(current_user.email)
+    posts
+  else
+    posts.delete_if { |x| x.hidden == true }
+  end
+
+  posts
 end
