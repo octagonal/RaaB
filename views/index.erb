@@ -1,18 +1,18 @@
 <head>
-<link href="/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="<%= url_for('/bootstrap.min.css') %>" rel="stylesheet" type="text/css">
 </head>
 <body>
   <div class="container">
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/"><%= sidebar[:title] %></a>
+          <a class="navbar-brand" href="<%= url_for('/') %>"><%= sidebar[:title] %></a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <% sidebar[:links].each do |link| -%>
-              <li><a href="/<%= link[:link] %>"><%= link[:title] %></a></li>
+              <li><a href="<%= url_for('/' + link[:link]) %>"><%= link[:title] %></a></li>
             <% end -%>
           </ul>
         </div>
@@ -23,10 +23,10 @@
     </blockquote>
     <% posts.each do |post| -%>
      <h1>
-       <a href="<%= post.permalink%>"><%= post.title %></a>
+       <a href="<%= url_for('/' + post.permalink) %>"><%= post.title %></a>
        <span class="small"><%= post.author %> (<%= post.author_flair_text %>)</span>
      </h1>
-     <a href="/flair/<%= post.link_flair_text %>"><span class="label label-success"><%= post.link_flair_text %></span></a>
+     <a href="<%= url_for('/flair/' + post.link_flair_text) %>"><span class="label label-success"><%= post.link_flair_text %></span></a>
      <%= post.selftext %>
     <% end -%>
   </div>

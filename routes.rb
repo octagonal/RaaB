@@ -19,7 +19,6 @@ DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
 DataMapper.auto_upgrade!
 
 get '/' do
-  url_for("/")
   erb :index, :locals => {
     :posts => ensureAuthorized(Posts.getAll()),
     :sidebar => Info.getSidebar()
@@ -52,6 +51,6 @@ end
 
 helpers do
   def url_for(fragment)
-    puts "#{request.scheme}://#{request.host}:#{request.port}#{request.script_name}#{fragment}"
+    "#{request.scheme}://#{request.host}:#{request.port}#{request.script_name}#{fragment}"
   end
 end
