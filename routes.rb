@@ -96,9 +96,12 @@ class RaaB < Sinatra::Base
   end
 
   post '/login' do
+    puts "login post"
     env['warden'].authenticate!
+    puts "test"
 
     if session[:return_to].nil?
+      puts "redirecting"
       redirect '/'
     else
       redirect session[:return_to]
@@ -115,8 +118,9 @@ class RaaB < Sinatra::Base
 
   post '/update' do
     env['warden'].authenticate!
-
     User.update(:username => User.get(session["warden.user.default.key"]).username, :password => params['user']['password'])
+    env['warden'].authenticate!
+
 
     if session[:return_to].nil?
       redirect '/'
