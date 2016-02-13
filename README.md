@@ -1,6 +1,10 @@
 # RaaB
 Use Reddit as a Backend for your blog
 
+## Notice
+
+This is really just a personal project at the moment, lots of stuff is undocumented/hardcoded. Do not use in production unless you are me.
+
 ## Building
 
 * Add a .yaml file at `/` called `api_data.yaml`
