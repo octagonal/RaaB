@@ -1,0 +1,3 @@
+require './routes'
+
+run RaaB
