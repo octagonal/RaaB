@@ -13,7 +13,6 @@ class Posts < Api
   end
 
   def Posts.getSingle(fullname)
-    puts fullname
     post = @@w.request_object(:get, "/by_id/t3_" + fullname + ".json", {})[0]
     [Posts.fmt(post)]
   end
