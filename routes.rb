@@ -41,7 +41,7 @@ class RaaB < Sinatra::Base
   end
 
   enable :sessions
-  set :session_secret, "supersecret"
+  set :session_secret, Api.api_data["secret"]
 
   use Warden::Manager do |config|
     # Tell Warden how to save our User info into a session.
@@ -70,9 +70,6 @@ class RaaB < Sinatra::Base
   end
 
   get '/' do
-    #puts session.to_a
-    #puts session["warden.user.default.key"]
-    #puts User.get(session["warden.user.default.key"]).username
     erb :index, :locals => {
       :posts => ensureAuthorized(Posts.getAll()),
       #:posts => Posts.getAll(),
