@@ -85,10 +85,30 @@ class RaaB < Sinatra::Base
   end
 
   get '/:id/:title' do
-    erb :index, :locals => {
-      :posts => ensureAuthorized(Posts.getSingle("#{params['id']}")),
-      :sidebar => Info.getSidebar()
+    post =  ensureAuthorized(Posts.getSingle("#{params['id']}")).first
+    comments = Comment.all(:post_id => post.permalink)
+
+    erb :single, :locals => {
+      :post => post,
+      :sidebar => Info.getSidebar(),
+      :comments => Comment.all(:post_id => post.permalink)
     }
+  end
+
+  post '/post_comment' do
+    env['warden'].authenticate!
+    comment = Comment.new(
+      :post_id => params["post"],
+      :body => params["comment"],
+      :created_at => Time.now
+    )
+    puts session["warden.user.default.key"].to_i
+    comment.user_id = session["warden.user.default.key"].to_i
+
+    puts comment
+    puts comment.save
+
+    redirect(url_for("/" + params["post"]))
   end
 
   get '/login' do
@@ -102,9 +122,9 @@ class RaaB < Sinatra::Base
 
     if session[:return_to].nil?
       puts "redirecting"
-      redirect '/'
+      redirect(url_for('/'))
     else
-      redirect session[:return_to]
+      redirect(url_for(session[:return_to]))
     end
   end
 
@@ -118,21 +138,21 @@ class RaaB < Sinatra::Base
 
   post '/update' do
     env['warden'].authenticate!
-    User.update(:username => User.get(session["warden.user.default.key"]).username, :password => params['user']['password'])
+    user = User.update(:username => User.get(session["warden.user.default.key"]).username, :password => params['user']['password'])
     env['warden'].authenticate!
 
 
     if session[:return_to].nil?
-      redirect '/'
+      redirect(url_for('/'))
     else
-      redirect session[:return_to]
+      redirect(url_for(session[:return_to]))
     end
   end
 
   get '/logout' do
     env['warden'].raw_session.inspect
     env['warden'].logout
-    redirect '/'
+    redirect(url_for('/'))
   end
 
 

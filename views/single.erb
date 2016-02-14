@@ -1,0 +1,50 @@
+<head>
+<link href="<%= url_for('/bootstrap.min.css') %>" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<%= url_for('/') %>"><%= sidebar[:title] %></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <% sidebar[:links].each do |link| -%>
+              <li><a href="<%= url_for('/' + link[:link]) %>"><%= link[:title] %></a></li>
+            <% end -%>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <blockquote>
+      <p><%= sidebar[:description] %></p>
+    </blockquote>
+     <h1>
+       <a href="<%= url_for('/' + post.permalink) %>"><%= post.title %></a>
+       <span class="small"><%= post.author %> (<%= post.author_flair_text %>)</span>
+     </h1>
+     <a href="<%= url_for('/flair/' + post.link_flair_text) %>"><span class="label label-success"><%= post.link_flair_text %></span></a>
+     <%= post.selftext %>
+     <hr>
+     <div>
+     <% comments.each do |comment| -%>
+      <blockquote>
+        <p><%= comment.body %></p>
+        <small>Posted by <%= comment.user.username.sub("."," ").split(" ").map {|b| b.capitalize}.join(" ") %> on <cite title="Source Title"><%= comment.created_at %></cite></small>
+      </blockquote>
+     <% end -%>
+     <form class="form-horizontal" action="<%= url_for('/post_comment') %>" method="post">
+       <legend>Post a Comment</legend>
+       <div class="form-group">
+        <div class="col-lg-12">
+          <textarea class="form-control" rows="3" id="textArea" type="text" name="comment"></textarea>
+        </div>
+      </div>
+       <input class="form-control" type="hidden" name="post" value="<%= post.permalink %>">
+       <input class="form-control" type="submit" value="Post comment" />
+     </form>
+   </div>
+  </div>
+</body>
