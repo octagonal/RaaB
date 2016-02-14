@@ -20,6 +20,16 @@ class Info < Api
       link[:link] = link[:link][link[:link].length - 2 .. link[:link].length - 1].join("/")
     }
 
+    links.push({
+        :title => "stagereporting".capitalize,
+        :link => "flair/stagereporting"
+    })
+
+    links.push({
+        :title => "thesisreporting".capitalize,
+        :link => "flair/thesisreporting"
+    })
+
     sidebar = {
       :title => html.xpath("//p")[0].text,
       :description => html.xpath("//p")[1].text,
